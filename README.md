@@ -1,77 +1,70 @@
-# Weather Data Pipeline 🚀
+# 🌦 Weather Data Pipeline
 
-A real-time data pipeline for ingesting, processing, and visualizing weather data from multiple cities in Italy.
+A **real-time data engineering pipeline** that ingests, processes, and visualizes weather data from multiple cities.
 
-The system collects weather observations via API, streams them through a message queue, stores them in a database, and provides an interactive analytics dashboard.
+The system collects weather observations from an external API, streams them through a message queue, stores them in a relational database, and exposes the data through an interactive analytics dashboard.
 
-This project demonstrates a modern **data engineering architecture** including streaming ingestion, asynchronous processing, containerization, and data visualization.
+This project demonstrates a modern **event-driven data pipeline architecture** using containerized microservices.
 
 ---
 
-# Architecture
+# 🚀 Features
 
-The system follows a **producer → queue → consumer → database → dashboard** architecture.
+- Real-time weather data ingestion
+- Event-driven architecture using message queues
+- Multi-city tracking with dynamic city registration
+- Interactive analytics dashboard
+- Pipeline monitoring metrics
+- Containerized infrastructure with Docker
+
+---
+
+# 🏗 Architecture
+
+The system follows a **streaming data pipeline architecture**.
 
 ```
-           Open-Meteo API
-                │
-                ▼
-        Producer (Python)
-     Multi-city data ingestion
-                │
-                ▼
-            RabbitMQ
-        Message queue / buffer
-                │
-                ▼
-        Consumer (Python)
-     Data validation & storage
-                │
-                ▼
-            PostgreSQL
-       Persistent storage
-                │
-                ▼
-        Streamlit Dashboard
-     Real-time analytics UI
+         Weather API
+             │
+             ▼
+      Producer Service
+   (data ingestion layer)
+             │
+             ▼
+          RabbitMQ
+      (message broker)
+             │
+             ▼
+      Consumer Service
+     (data processing)
+             │
+             ▼
+         PostgreSQL
+       (data storage)
+             │
+             ▼
+     Streamlit Dashboard
+     (data visualization)
 ```
 
----
-
-# Key Features
-
-## Multi-City Data Ingestion
-
-Cities can be dynamically added from the dashboard.
-
-The system automatically:
-
-1. Geocodes the city name
-2. Stores coordinates in the database
-3. Producer reads the updated city list
-4. Weather data ingestion begins automatically
-
----
-
-## Real-Time Data Pipeline
-
-Weather data flows through the system in near real-time.
+### Pipeline Flow
 
 ```
 API → Producer → RabbitMQ → Consumer → PostgreSQL → Dashboard
 ```
 
-This design ensures:
+This architecture enables:
 
-- decoupled components
+- decoupled services
 - asynchronous processing
-- scalable architecture
+- scalable ingestion
+- fault-tolerant message handling
 
 ---
 
-## Interactive Dashboard
+# 📊 Dashboard
 
-The Streamlit dashboard provides:
+The Streamlit dashboard provides **real-time monitoring and analytics**.
 
 ### Weather Metrics
 
@@ -84,42 +77,42 @@ Pressure    | Humidity
 ### Pipeline Monitoring
 
 ```
-Pipeline Throughput | Data Deltas
+Throughput | Data Deltas
 ```
 
-### Features
+### Dashboard Capabilities
 
 - dynamic city selection
-- historical time-series visualization
-- ingestion lag monitoring
-- throughput metrics
-- weather delta analysis
+- historical time-series charts
+- ingestion delay monitoring
+- message throughput visualization
+- weather change (delta) analysis
 - raw data inspection
 
 ---
 
-# Data Model
+# 🗂 Data Model
 
 ## weather_observations
 
-Stores the collected weather observations.
+Stores weather measurements collected from the API.
 
 | column | description |
 |------|-------------|
-| id | unique row identifier |
+| id | unique identifier |
 | city | city name |
-| ts_utc | timestamp from weather API |
+| ts_utc | API timestamp |
 | temperature_c | temperature in Celsius |
 | wind_speed | wind speed |
 | humidity | relative humidity |
 | pressure | atmospheric pressure |
-| ingestion_time | pipeline ingestion timestamp |
+| ingestion_time | ingestion timestamp |
 
 ---
 
 ## cities
 
-List of tracked cities.
+Stores the list of tracked cities.
 
 | column | description |
 |------|-------------|
@@ -127,11 +120,11 @@ List of tracked cities.
 | lat | latitude |
 | lon | longitude |
 | country_code | country identifier |
-| created_at | timestamp when city was added |
+| created_at | timestamp when the city was added |
 
 ---
 
-# Technologies Used
+# ⚙ Tech Stack
 
 ### Data Engineering
 
@@ -149,14 +142,14 @@ List of tracked cities.
 
 - Streamlit
 
-### APIs
+### External APIs
 
 - Open-Meteo Weather API
 - OpenStreetMap Nominatim Geocoding
 
 ---
 
-# Project Structure
+# 📂 Project Structure
 
 ```
 data-pipeline
@@ -188,7 +181,7 @@ data-pipeline
 
 ---
 
-# Running the Project
+# ▶ Running the Project
 
 ## 1 Clone the repository
 
@@ -205,13 +198,13 @@ cd weather-data-pipeline
 docker compose up --build
 ```
 
-This will start:
+This launches the entire infrastructure:
 
-- PostgreSQL
-- RabbitMQ
-- Producer
-- Consumer
-- Streamlit Dashboard
+- PostgreSQL database
+- RabbitMQ message broker
+- Producer service
+- Consumer service
+- Streamlit analytics dashboard
 
 ---
 
@@ -223,9 +216,9 @@ http://localhost:8501
 
 ---
 
-# Adding New Cities
+# 🌍 Adding New Cities
 
-Cities can be added directly from the dashboard.
+Cities can be dynamically added from the dashboard.
 
 Example:
 
@@ -238,43 +231,11 @@ The system will:
 
 1. Geocode the city using OpenStreetMap
 2. Store coordinates in the database
-3. Producer will automatically start ingesting data
+3. Producer automatically starts collecting weather data
 
 ---
 
-# Example Workflow
-
-```
-Add city (Rome)
-        │
-        ▼
-Geocoding via Nominatim
-        │
-        ▼
-INSERT INTO cities
-        │
-        ▼
-Producer reads city list
-        │
-        ▼
-Weather API request
-        │
-        ▼
-RabbitMQ queue
-        │
-        ▼
-Consumer processes message
-        │
-        ▼
-PostgreSQL storage
-        │
-        ▼
-Dashboard visualization
-```
-
----
-
-# Example Queries
+# 🔍 Example Queries
 
 Retrieve latest observations:
 
@@ -285,7 +246,7 @@ ORDER BY ingestion_time DESC
 LIMIT 10;
 ```
 
-Retrieve weather history for a city:
+Retrieve historical data for a city:
 
 ```sql
 SELECT *
@@ -296,49 +257,49 @@ ORDER BY ts_utc;
 
 ---
 
-# Monitoring
+# 📈 Monitoring
 
-The dashboard includes pipeline monitoring features.
+The dashboard includes built-in pipeline monitoring.
 
 ### Pipeline Lag
 
-Measures delay between ingestion and current time.
+Measures delay between ingestion time and current time.
 
 ### Throughput
 
-Shows number of messages processed per API timestamp.
+Displays number of processed messages per API timestamp.
 
 ### Weather Deltas
 
-Shows change between the latest two weather measurements.
+Shows variation between the latest weather measurements.
 
 ---
 
-# Possible Improvements
+# 🔮 Future Improvements
 
-Future extensions for the project:
+Possible extensions:
 
 - Kafka streaming pipeline
 - Airflow orchestration
 - Grafana monitoring
-- multi-city comparison charts
-- anomaly detection for weather patterns
+- multi-city comparison analytics
+- anomaly detection
 - cloud deployment (AWS / GCP)
 
 ---
 
-# Learning Objectives
+# 🎓 Learning Objectives
 
-This project demonstrates practical skills in:
+This project demonstrates skills in:
 
-- data pipeline design
-- message queues
-- asynchronous processing
+- event-driven data pipelines
+- streaming ingestion
+- message queue architectures
 - containerized microservices
-- real-time analytics dashboards
+- real-time data analytics
 
 ---
 
-# License
+# 📄 License
 
 MIT License

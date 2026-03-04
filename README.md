@@ -1,5 +1,11 @@
 # 🌦 Weather Data Pipeline
 
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-Message%20Queue-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
+
 A **real-time data engineering pipeline** that ingests, processes, and visualizes weather data from multiple cities.
 
 The system collects weather observations from an external API, streams them through a message queue, stores them in a relational database, and exposes the data through an interactive analytics dashboard.

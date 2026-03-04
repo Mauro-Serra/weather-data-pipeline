@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: pipeline
+      POSTGRES_USER: pipeline
+      POSTGRES_PASSWORD: pipeline
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./service/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"     # AMQP
+      - "15672:15672"   # UI web
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  producer:
+    build: ./service/producer
+    env_file: .env
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  consumer:
+    build: ./service/consumer
+    env_file: .env
+    depends_on:
+      - rabbitmq
+      - postgres
+    restart: unless-stopped
+
+  dashboard:
+    build: ./service/dashboard
+    env_file: .env
+    depends_on:
+      - postgres
+    ports:
+      - "8501:8501"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
